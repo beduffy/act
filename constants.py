@@ -2,7 +2,8 @@ import pathlib
 
 ### Task parameters
 # DATA_DIR = '<put your data dir here>'
-DATA_DIR = '/home/ben/all_projects/act/data'
+#DATA_DIR = '/home/ben/all_projects/act/data'
+DATA_DIR = '/teamspace/studios/this_studio/act/data'
 SIM_TASK_CONFIGS = {
     'sim_transfer_cube_scripted':{
         'dataset_dir': DATA_DIR + '/sim_transfer_cube_scripted',
@@ -31,6 +32,15 @@ SIM_TASK_CONFIGS = {
         'episode_len': 500,
         'camera_names': ['top']
     },
+
+    'ben_stupid_test_task': {
+        'dataset_dir': DATA_DIR + '/ben_stupid_test_task',
+        'num_episodes': 10,
+        'episode_len': 99,
+        'camera_names': ['top']
+    },
+
+
 }
 
 ### Simulation envs fixed constants
