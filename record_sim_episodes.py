@@ -8,10 +8,18 @@ import h5py
 from constants import PUPPET_GRIPPER_POSITION_NORMALIZE_FN, SIM_TASK_CONFIGS
 from ee_sim_env import make_ee_sim_env
 from sim_env import make_sim_env, BOX_POSE
-from scripted_policy import PickAndTransferPolicy, InsertionPolicy
+from scripted_policy import PickAndTransferPolicy, InsertionPolicy, BenStupidTask
 
 import IPython
 e = IPython.embed
+
+
+"""
+MUJOCO_GL=osmesa python3 record_sim_episodes.py \
+ --task_name ben_stupid_test_task --dataset_dir data/ben_stupid_test_task --num_episodes 10
+
+python visualize_dataset.py
+"""
 
 
 def main(args):
@@ -35,10 +43,13 @@ def main(args):
 
     episode_len = SIM_TASK_CONFIGS[task_name]['episode_len']
     camera_names = SIM_TASK_CONFIGS[task_name]['camera_names']
+    # import pdb;pdb.set_trace()
     if task_name == 'sim_transfer_cube_scripted':
         policy_cls = PickAndTransferPolicy
     elif task_name == 'sim_insertion_scripted':
         policy_cls = InsertionPolicy
+    elif task_name == 'ben_stupid_test_task':
+        policy_cls = BenStupidTask
     else:
         raise NotImplementedError
 
@@ -58,6 +69,7 @@ def main(args):
             plt.ion()
         for step in range(episode_len):
             action = policy(ts)
+            print('step: {}. action: '.format(step))
             ts = env.step(action)
             episode.append(ts)
             if onscreen_render:
@@ -90,7 +102,8 @@ def main(args):
 
         # setup the environment
         print('Replaying joint commands')
-        env = make_sim_env(task_name)
+        env = make_sim_env(task_name)  # TODO bug since above was non-ee? ohhhh below comment, maybe we record in ee then...
+        # env = make_ee_sim_env(task_name)
         BOX_POSE[0] = subtask_info # make sure the sim_env has the same object configurations as ee_sim_env
         ts = env.reset()
 

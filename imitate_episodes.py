@@ -21,6 +21,12 @@ from sim_env import BOX_POSE
 import IPython
 e = IPython.embed
 
+
+# was needed for cloud running
+# MUJOCO_GL=osmesa python3 imitate_episodes.py --task_name sim_transfer_cube_scripted --ckpt_dir scripted_sim_transfer_cube --policy_class ACT --kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000  --lr 1e-5 --seed 0 --eval
+
+# TODO in eval why is there a camera following? only in eval? we only use top otherwise?
+
 def main(args):
     set_seed(1)
     # command line parameters
@@ -90,8 +96,11 @@ def main(args):
 
     if is_eval:
         ckpt_names = [f'policy_best.ckpt']
+        ckpt_names = [f'policy_epoch_200_seed_0.ckpt']
+        ckpt_names = [f'policy_epoch_800_seed_0.ckpt']
         results = []
         for ckpt_name in ckpt_names:
+            # import pdb;pdb.set_trace()
             success_rate, avg_return = eval_bc(config, ckpt_name, save_episode=True)
             results.append([ckpt_name, success_rate, avg_return])
 
